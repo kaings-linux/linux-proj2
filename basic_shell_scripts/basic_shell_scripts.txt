@@ -1,0 +1,24 @@
+hostname        ... pritout our server hostname
+read <variable> ... retrieve input from user & store it in <variable>
+
+
+// example of bash script (with proper format) - lets name it "example1"
+```
+#!/bin/bash
+
+# author        : xxxxx
+# created date  : dd/mm/yyyy
+# description   : bla bla bla
+# modified date : dd/mm/yyyy
+
+a=pwd                       # if command is not appended to string, this is OK (it works!) 
+b=`hostname`                # if command is appended to string, we need to put "`" to wrap the command in order for it to work
+d=ls                        # if command is not appended to string, this is OK (if it is appended to string, we need to wrap it with "`")
+
+$a                          # print current path
+$ls                         # list out content of current directory
+echo my server name is $b   # since command is wrapped with "`", this works!   
+echo what is your name?     
+read c                      # will wait fr user's input & store it into variable c
+```
+

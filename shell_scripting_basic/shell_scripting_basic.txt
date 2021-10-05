@@ -1,0 +1,9 @@
+// shell basic
+echo $0             ... show currently in-use (active) shell
+cat /etc/shells     ... show available shells in your machine
+cat /etc/password   ... show information of users & types of shell they are using
+
+sh                  ... on terminal type `sh` will switch to sh shell. To exit type `exit` (back to bash)
+csh                 ... on terminal type `csh` will switch to csh shell. To exit type `exit` (back to bash)
+zsh                 ... on terminal type `zsh` will switch to zsh shell. To exit type `exit` (back to bash)
+

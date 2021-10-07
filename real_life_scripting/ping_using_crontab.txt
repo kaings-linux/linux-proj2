@@ -1,0 +1,6 @@
+crontab -e ... edit crontab
+
+// crontab content we put
+```
+34      20      *       *       *       /home/user/ping-hosts-script >> ping-output                                 # cron will run everyday at 20:34
+40      20      *       *       *       /home/user/ping-hosts-script | mail -s "Mail Title" myemail@email.com       # will email the output provided if the email server is set within the linux machine

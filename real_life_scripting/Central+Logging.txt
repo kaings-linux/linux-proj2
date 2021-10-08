@@ -1,0 +1,70 @@
+Central Logging
+=================
+Trace the log file:
+
+```
+vi /root/logtail	... create script file called logtail
+```
+
+# logtail script content as follows
+# `egrep` is like more efficient `grep` that can `grep` multiple keywords
+# `tail -n0` (or `tail -n 0`) 	... to show the future line (usually follow by `-f` follow to keep monitoring the logs)
+# `tail -fn0` (or `tail -fn 0`) ... the terminal will wait for new logs to arrive
+# `tail -fn1` (or `tail -fn 1`) ... the terminal will print last 1 line & wait for new logs to arrive
+
+#!/bin/bash
+
+tail -fn0 /var/log/messages | while read line
+
+do
+	echo $line | egrep -i "refused|invalid|error|fail|lost|shut|down|offline"
+		if [ $? = 0 ]
+		then
+		echo $line >> /tmp/filtered-messages
+		fi
+done
+
+
+```
+# run ./logtail script
+/root/logtail 			... run logtail script (terminal will be waiting for any new logs - run in background)
+nohup /root/logtail &	... to run logtail script in the background. Once you run in background if you want to bring it back to foreground, simply run `fg`
+
+
+# open new terminal & run the following
+logger -t error "Will is testing"			... create log with tag "error" with content "Will is testing"
+logger -t invalid "Will is testing again"	... create log with tag "invalid" with content "Will is testing again"
+
+# once we execute above logger command on new terminal, immediately the screen where logtail is running will log out
+# those logs & also the logs can be found in file `/tmp/filtered-messages`
+
+```
+
+
+--------------------------------------------------------------------
+
+Notification to emails
+
+```
+vi /root/Log-Alert
+```
+
+
+#!/bin/bash
+
+systems="imran_ny@hotmail.com,charles.gorden@email.com"
+
+if [ -s /tmp/filtered-messages ]
+then
+cat /tmp/filtered-messages | sort | uniq | mail -s "CHECK: Syslog Errors" $systems
+rm /tmp/filtered-messages
+else
+fi
+
+
+--------------------------------------------------------------------
+Schedule the Notification to run every 15 minutes:
+
+```
+*/15 * * * * /root/Log-Alert
+```

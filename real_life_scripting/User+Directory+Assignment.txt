@@ -1,0 +1,54 @@
+# Check if the directories in /home are assigned to a user
+# ps: for security reason, directory right after /home should be assigned to a user.
+# 	  to check available users, go to `/etc/passwd`
+# The following script is to check if there is any directory under /home that has no user.
+# If there is directories without user, we should remove it (because there is no user)
+===========================================================================================
+```
+Become root
+vi checkdir
+cd /home
+mkdir junos
+```
+
+
+#!/bin/bash
+
+cd /home
+for DIR in *
+do
+	CHK=$(grep -c "/home/$DIR" /etc/passwd)
+
+	if [ $CHK -ge 1 ]
+	then
+	echo "$DIR is assigned to a user"
+	else
+	echo "$DIR is NOT assigned to a user"
+	fi
+done
+
+
+
+
+
+# ============== ANOTHER EXAMPLE - e.g. checkscript ====================
+#!/bin/bash
+
+cd /home
+
+for dir in *
+do
+	chk_num=$(grep -c /home/$dir /etc/passwd)
+	if [ $chk_sum -ge 1 ]
+	then
+		echo "/home/$dir" DOES have user!!!!!
+	else
+		echo "/home/$dir" DOES NOT have user!!!!!
+	fi
+done
+
+
+# run it by
+```
+./checkscript 2> /dev/null	... run the script & omit all error messages
+```

@@ -1,0 +1,43 @@
+# Script to disable users accounts
+# Test Commands
+# `lastlog` is similar to `last` command but more efficient (to retrieve info of logged in users)
+
+```
+lastlog -b 90
+lastlog -b 90 | tail -n+2
+lastlog -b 90 | tail -n+2 
+lastlog | tail -n+2 | grep 'test' | awk '{print $1}'
+```
+
+
+# Disable account with For loop
+
+#!/bin/bash
+
+a=`lastlog | tail -n+2 | grep 'test' | awk '{print $1}'`
+for i in $a
+do
+  echo $i
+  usermod -L $i         # disable user account
+done
+
+
+# to view disable account frm /etc/shadow
+
+```
+cat /etc/shadow             ... display all accounts
+
+usermod -L <user-accounts>  ... to lock user account. ref: 
+                                https://www.tecmint.com/usermod-command-examples/
+                                https://www.geeksforgeeks.org/usermod-command-in-linux-with-examples/
+```
+
+
+# Disable using xargs
+# the reason we use `xargs` below example is because `echo` & `usermod` both does NOT accept stream input (only accept arguments).
+# Therefore, we cannot simply use pipping '|', we need `xargs` to convert stream input to arguments
+
+```
+lastlog | tail -n+2 | grep 'test' | awk '{print $1}' | xargs -I{} echo {}
+lastlog | tail -n+2 | grep 'test' | awk '{print $1}' | xargs -I{} usermod -L {}
+```
